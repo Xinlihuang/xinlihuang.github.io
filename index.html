@@ -1,0 +1,566 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#171a18">
+  <meta name="description" content="黄欣立的个人主页。关注 AI 在法律与商业、投资研究和社区协作中的应用，记录实践、方法与尚未解决的问题。">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://xinlihuang.github.io/">
+  <meta property="og:url" content="https://xinlihuang.github.io/">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:title" content="黄欣立 — 把 AI 用进真实问题里">
+  <meta property="og:description" content="从具体问题出发，记录 AI 实践与思考。">
+  <title>黄欣立 — 把 AI 用进真实问题里</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23171a18'/%3E%3Cpath d='M17 17L47 47M47 17L17 47M32 12V52M12 32H52' stroke='%23dbac88' stroke-width='3'/%3E%3C/svg%3E">
+  <style>
+    /* 01 / Tokens and foundations. No remote assets or runtime dependencies. */
+    :root {
+      --ink: #1e2722; --muted: #626a63; --paper: #f3f2ec; --white: #fbfaf6;
+      --dark: #171a18; --dim: #b9c0b7; --accent: #dbac88; --line: #d2d6cc;
+      --dark-line: #ffffff29; --green: #364f43;
+      --sans: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+      --mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      --max: 1296px; --gutter: clamp(24px, 5vw, 76px);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 100px; }
+    body { margin: 0; color: var(--ink); background: var(--paper); font: 16px/1.75 var(--sans); -webkit-font-smoothing: antialiased; }
+    [hidden] { display: none !important; }
+    ::selection { background: var(--accent); color: var(--dark); }
+    a { color: inherit; text-decoration: none; }
+    button, input, textarea { font: inherit; }
+    button { cursor: pointer; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    button:disabled { cursor: not-allowed; opacity: .5; }
+    a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px solid #b26c3d; outline-offset: 6px; }
+    input:focus-visible, textarea:focus-visible { outline: 2px solid #526a5a; outline-offset: 3px; }
+    [tabindex="-1"]:focus { outline: none; }
+    svg { display: block; max-width: 100%; }
+    h1, h2, h3, h4, p, figure { margin: 0; }
+    h1, h2, h3 { font-weight: 500; line-height: 1.25; }
+    .wrap { width: min(var(--max), calc(100% - var(--gutter) * 2)); margin-inline: auto; }
+    .eyebrow, .mono { font: 11px/1.7 var(--mono); letter-spacing: 1.6px; text-transform: uppercase; }
+    .eyebrow { display: flex; align-items: center; gap: 14px; }
+    .eyebrow::before { content: ""; width: 20px; height: 1px; background: currentColor; }
+    .arrow { display: inline-block; font-weight: 400; transition: transform .22s; }
+    a:hover .arrow { transform: translate(3px, -3px); }
+    .skip { position: fixed; top: -100px; left: 20px; padding: 12px 20px; color: var(--dark); background: var(--white); z-index: 100; }
+    .skip:focus { top: 12px; }
+    .btn { display: inline-flex; align-items: center; justify-content: space-between; gap: 34px; min-height: 48px; padding: 13px 22px; border: 1px solid currentColor; border-radius: 3px; font-size: 14px; line-height: 1.4; transition: background .2s, color .2s; }
+    .btn-light { background: var(--paper); color: var(--dark); border-color: var(--paper); }
+    .btn-light:hover { background: var(--accent); border-color: var(--accent); }
+    .btn-dark { background: var(--ink); color: var(--white); border-color: var(--ink); }
+    .btn-dark:hover { background: var(--green); }
+    .text-link { display: inline-flex; gap: 20px; align-items: center; padding: 12px 0; min-height: 44px; font-size: 14px; }
+    .section-label { display: flex; justify-content: space-between; gap: 20px; padding-bottom: 26px; border-bottom: 1px solid var(--line); font-size: 12px; letter-spacing: 1px; }
+    /* 02 / Navigation */
+    .site-header { color: var(--paper); background: var(--dark); position: relative; z-index: 10; }
+    .nav { display: flex; align-items: center; justify-content: space-between; min-height: 94px; gap: 24px; border-bottom: 1px solid var(--dark-line); }
+    .brand { display: inline-flex; align-items: center; gap: 16px; min-height: 48px; }
+    .brand svg { color: var(--accent); width: 29px; height: 29px; }
+    .brand-name { font-size: 18px; letter-spacing: 2px; }
+    .brand small { display: block; font: 9px/1.4 var(--mono); letter-spacing: 1.6px; color: var(--dim); }
+    .navigation { display: flex; align-items: center; gap: 35px; }
+    .navigation > a { font-size: 14px; min-height: 44px; display: inline-flex; align-items: center; gap: 18px; border-bottom: 1px solid transparent; }
+    .navigation > a:hover, .navigation > a[aria-current] { color: var(--accent); }
+    .navigation > .nav-tool { padding: 0 17px; border: 1px solid #a1aaa278; border-radius: 3px; }
+    .menu { display: none; min-width: 44px; min-height: 44px; background: none; color: inherit; border: 1px solid #ffffff60; border-radius: 3px; }
+    /* 03 / Hero and original vector artwork */
+    .hero { color: var(--paper); background: var(--dark); overflow: hidden; }
+    .hero-grid { display: grid; grid-template-columns: 1.1fr 1fr; align-items: center; gap: 16px; padding: 70px 0 60px; min-height: 620px; }
+    .hero-copy { position: relative; z-index: 1; }
+    .hero .eyebrow { color: var(--accent); margin-bottom: 34px; }
+    .hero h1 { font-size: clamp(54px, 5.55vw, 84px); line-height: 1.2; letter-spacing: -3px; font-weight: 500; }
+    .hero h1 span { color: var(--accent); }
+    .hero-intro { max-width: 440px; margin-top: 28px; color: var(--dim); font-size: 16px; line-height: 1.9; }
+    .hero-actions { display: flex; align-items: center; gap: 32px; margin-top: 33px; flex-wrap: wrap; }
+    .hero-art { min-width: 0; align-self: stretch; position: relative; display: flex; flex-direction: column; justify-content: center; }
+    .hero-art .field { width: 118%; max-width: none; margin-left: -8%; height: 430px; overflow: visible; }
+    .art-caption { display: flex; justify-content: space-between; align-items: center; color: var(--dim); border-top: 1px solid var(--dark-line); padding-top: 15px; margin: -4px 0 0 20px; }
+    .art-caption span { font-size: 10px; letter-spacing: 1px; }
+    .motion { color: var(--dim); border: 0; background: transparent; min-height: 44px; padding: 8px 0 8px 15px; font-size: 12px; }
+    .motion:hover { color: var(--accent); }
+    .field-lines { transform-origin: 50% 50%; }
+    .field.is-playing .field-lines { animation: breathe 14s ease-in-out infinite alternate; }
+    @keyframes breathe { from { transform: rotate(-2deg) scale(.98); } to { transform: rotate(3deg) scale(1.035); } }
+    .hero-bottom { display: flex; justify-content: space-between; padding: 24px 0 27px; border-top: 1px solid var(--dark-line); font-size: 12px; color: var(--dim); }
+    .hero-bottom .domains { display: flex; gap: 35px; }
+    .hero-bottom .scroll { color: var(--accent); letter-spacing: 2px; }
+    /* 04 / Selected work: two individually composed case covers */
+    .work { padding: 92px 0 100px; }
+    .section-heading { display: flex; justify-content: space-between; gap: 40px; align-items: end; margin: 42px 0 44px; }
+    .section-heading h2 { font-size: clamp(32px, 3.3vw, 48px); letter-spacing: -1.3px; line-height: 1.4; }
+    .section-heading > p { max-width: 320px; color: var(--muted); font-size: 15px; line-height: 1.9; }
+    .work-grid { display: grid; grid-template-columns: 1.18fr 1fr; gap: 30px; align-items: start; }
+    .work-card { display: block; min-width: 0; }
+    .project-cover { height: 340px; position: relative; overflow: hidden; border-radius: 5px; transition: filter .25s; }
+    .work-card:hover .project-cover { filter: brightness(1.06); }
+    .research-cover { background: #213b33; color: #dbe1d1; }
+    .cover-top { position: absolute; top: 24px; left: 28px; right: 28px; display: flex; justify-content: space-between; font: 10px var(--mono); letter-spacing: 1.2px; z-index: 1; }
+    .research-cover svg { width: 100%; height: 100%; }
+    .cover-bottom { position: absolute; left: 28px; bottom: 23px; font-size: 12px; color: #c9d5c7; }
+    .cover-bottom span { margin-left: 16px; color: #a7bba9; font-size: 10px; }
+    .website-cover { background: #d4d7c8; color: #303c31; padding: 64px 36px 30px; }
+    .website-cover::before { content: ""; position: absolute; top: 67px; bottom: 38px; left: 25%; right: 25%; border: 1px solid #354a3c33; transform: rotate(15deg); }
+    .website-cover::after { content: "+"; position: absolute; right: 38px; bottom: 30px; font-size: 60px; font-weight: 200; }
+    .website-cover .cover-top { color: #4a574a; }
+    .cover-type { font: 82px/.95 Georgia, "Times New Roman", serif; letter-spacing: -5px; position: relative; }
+    .cover-type i { color: #925c3e; font-weight: 400; }
+    .cover-sub { position: relative; font-size: 12px; margin-top: 25px; letter-spacing: 2px; }
+    .project-meta { display: flex; gap: 15px; margin-top: 25px; align-items: center; color: var(--muted); font-size: 11px; letter-spacing: .7px; }
+    .project-meta .status { margin-left: auto; padding-left: 13px; border-left: 1px solid var(--line); }
+    .project-title { display: flex; align-items: center; justify-content: space-between; gap: 25px; margin-top: 10px; }
+    .project-title h3 { font-size: 26px; letter-spacing: -.5px; }
+    .project-title .arrow { font-size: 25px; }
+    .project-description { font-size: 15px; line-height: 1.85; color: var(--muted); margin-top: 15px; max-width: 525px; }
+    /* 05 / Editorial notes */
+    .journal-home { padding: 0 0 96px; }
+    .journal-home .section-heading { margin-bottom: 32px; }
+    .journal-home h2 { font-size: clamp(30px, 3vw, 44px); }
+    .notes-rows { border-top: 1px solid var(--line); }
+    .note-row { display: grid; grid-template-columns: 140px 1fr 32px; gap: 32px; align-items: center; border-bottom: 1px solid var(--line); padding: 30px 0; transition: color .2s; }
+    .note-row:hover { color: #815132; }
+    .note-row .note-meta { font-size: 12px; color: var(--muted); }
+    .note-row .note-meta small { display: block; font: 10px/2 var(--mono); color: var(--muted); }
+    .note-row h3 { font-size: 22px; }
+    .note-row p { color: var(--muted); font-size: 14px; margin-top: 8px; }
+    .note-row .arrow { font-size: 23px; }
+    /* 06 / About, tool invitation, footer */
+    .about { color: var(--paper); background: var(--dark); padding: 82px 0 76px; }
+    .about .section-label { border-color: var(--dark-line); color: var(--dim); }
+    .about-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 70px; margin-top: 45px; }
+    .about h2 { font-size: clamp(32px, 3.2vw, 46px); line-height: 1.45; letter-spacing: -1px; }
+    .about h2 span { color: var(--accent); }
+    .about-copy { font-size: 16px; color: var(--dim); line-height: 2; }
+    .about-copy p + p { margin-top: 20px; }
+    .about-domains { display: grid; grid-template-columns: repeat(3,1fr); gap: 32px; margin-top: 64px; }
+    .domain { border-top: 1px solid var(--dark-line); padding-top: 21px; }
+    .domain span { color: var(--accent); font: 11px var(--mono); }
+    .domain h3 { font-size: 18px; margin-top: 15px; }
+    .domain p { color: var(--dim); margin-top: 12px; font-size: 14px; }
+    .contact-note { font-size: 12px; color: var(--dim); margin-top: 43px; }
+    .contact-note strong { color: var(--paper); font-weight: 400; margin-right: 14px; }
+    .playground { padding: 72px 0; background: #e6c6ac; }
+    .playground-grid { display: grid; grid-template-columns: 1fr auto; gap: 35px; align-items: center; }
+    .playground .eyebrow { margin-bottom: 20px; }
+    .playground h2 { font-size: clamp(28px, 3vw, 42px); letter-spacing: -1px; }
+    .playground p { margin-top: 18px; font-size: 15px; color: #52483e; }
+    .site-footer { background: var(--paper); }
+    .footer-inner { display: flex; justify-content: space-between; align-items: center; min-height: 110px; gap: 25px; font-size: 12px; color: var(--muted); }
+    .footer-inner .footer-brand { color: var(--ink); font-size: 18px; letter-spacing: 2px; }
+    .footer-right { display: flex; gap: 28px; align-items: center; }
+    /* 07 / Reading views and retained content */
+    .secondary { width: min(1000px, calc(100% - var(--gutter) * 2)); margin: 0 auto; padding: 46px 0 90px; min-height: 65vh; }
+    .reading-page { max-width: 850px; }
+    .back-link { display: inline-flex; align-items: center; min-height: 44px; font-size: 14px; color: var(--muted); margin-bottom: 40px; }
+    .back-link:hover { color: var(--ink); }
+    .section-id { color: var(--muted); font: 11px/1.7 var(--mono); letter-spacing: 1.5px; margin-bottom: 14px; }
+    .secondary h1 { font-size: clamp(34px, 4.2vw, 56px); letter-spacing: -1.5px; line-height: 1.3; }
+    .case-content { margin-top: 35px; }
+    .case-content h2 { font-size: 24px; margin: 34px 0 13px; }
+    .case-content p { font-size: 17px; line-height: 2; color: #505d53; }
+    .case-limit { border-left: 2px solid #9a6d4c; background: #e7e7dc; padding: 24px 28px; margin-top: 35px; }
+    .case-limit strong { font-weight: 500; }
+    .case-limit p { font-size: 15px; margin-top: 8px; }
+    .case-content .case-date { font-size: 12px; color: var(--muted); margin-top: 32px; }
+    .reading-end { border-top: 1px solid var(--line); margin: 35px 0 0; padding-top: 24px; display: block; }
+    .section-head { display: flex; justify-content: space-between; gap: 30px; align-items: end; margin-bottom: 32px; }
+    .section-head > p { font-size: 14px; color: var(--muted); }
+    .note { border-top: 1px solid var(--line); }
+    .note:last-child { border-bottom: 1px solid var(--line); }
+    .note summary { display: flex; align-items: center; gap: 25px; padding: 27px 0; cursor: pointer; list-style: none; }
+    .note summary::-webkit-details-marker { display: none; }
+    .note-num, .note-time { color: var(--muted); font: 11px var(--mono); }
+    .note-title { flex: 1; min-width: 0; }
+    .note-title strong { font-size: 22px; font-weight: 500; }
+    .note-title small { display: block; margin-top: 8px; font-size: 13px; color: var(--muted); }
+    .detail-toggle { font-size: 25px; transition: transform .2s; }
+    .note[open] .detail-toggle { transform: rotate(45deg); }
+    .note-content { padding: 0 45px 30px; font-size: 17px; line-height: 2; max-width: 850px; color: #505d53; }
+    .note-content p + p { margin-top: 18px; }
+    .note-content blockquote { margin: 24px 0; padding-left: 25px; border-left: 2px solid #9a6d4c; color: var(--ink); }
+    /* 08 / Action card. The v1 local-storage key and behavior are preserved. */
+    .action-lab { width: min(var(--max), calc(100% - var(--gutter) * 2)); }
+    .lab-local { color: var(--green); font-size: 12px; }
+    .lab-intro { font-size: 16px; color: var(--muted); margin: 0 0 24px; }
+    .lab-examples { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 30px; }
+    .lab-examples > span { color: var(--muted); font-size: 13px; margin-right: 5px; }
+    .lab-examples button { padding: 10px 14px; min-height: 44px; background: transparent; border: 1px solid #b5bdae; color: var(--ink); border-radius: 3px; font-size: 13px; }
+    .lab-examples button:hover { background: #e3e5da; }
+    .lab-grid { display: grid; grid-template-columns: 1.05fr 1fr; gap: 30px; align-items: start; }
+    .lab-editor { padding: 30px; border: 1px solid var(--line); border-radius: 5px; background: var(--white); min-width: 0; }
+    .lab-editor-top { display: flex; justify-content: space-between; gap: 12px; font-size: 12px; color: var(--muted); }
+    .lab-editor label { display: flex; align-items: center; justify-content: space-between; margin: 22px 0 9px; font-size: 15px; }
+    .lab-editor label span { font: 11px var(--mono); color: var(--muted); }
+    .lab-editor input, .lab-editor textarea, #copy-text { width: 100%; display: block; border: 1px solid #b5bdae; padding: 13px; border-radius: 3px; color: var(--ink); background: #f6f6f0; font-size: 16px; line-height: 1.7; resize: vertical; }
+    .lab-editor input::placeholder, .lab-editor textarea::placeholder { color: #65715f; font-size: 14px; }
+    .lab-extra { margin-top: 20px; }
+    .lab-extra summary { padding: 10px 0; min-height: 44px; cursor: pointer; font-size: 13px; color: var(--muted); }
+    .lab-actions, .lab-export { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
+    .primary, .lab-secondary { padding: 11px 16px; min-height: 44px; border: 1px solid var(--green); border-radius: 3px; font-size: 14px; }
+    .primary { background: var(--ink); color: var(--white); }
+    .lab-secondary { background: transparent; color: var(--ink); }
+    .lab-text-button { border: 0; background: transparent; color: var(--muted); padding: 10px; min-height: 44px; }
+    .lab-status { font-size: 13px; color: var(--green); margin-top: 20px; min-height: 46px; }
+    .lab-preview { position: sticky; top: 30px; background: #e6e9df; border: 1px solid #c3ccbd; border-radius: 5px; padding: 32px; min-width: 0; }
+    .preview-top { display: flex; justify-content: space-between; align-items: center; gap: 15px; }
+    .state-chip { font-size: 12px; padding: 3px 9px; border: 1px solid #bcc7b7; border-radius: 3px; }
+    .lab-preview h3 { font-size: 28px; line-height: 1.5; margin: 26px 0 15px; overflow-wrap: anywhere; white-space: pre-wrap; }
+    .card-hint, .lab-method { color: #53634e; font-size: 13px; line-height: 1.9; }
+    .lab-preview dl { margin: 25px 0 0; }
+    .lab-preview dl > div { padding: 20px 0; border-top: 1px solid #c3ccbd; }
+    .lab-preview dt { font-size: 12px; color: #53634e; margin-bottom: 8px; }
+    .lab-preview dd { margin: 0; font-size: 16px; line-height: 1.9; white-space: pre-wrap; overflow-wrap: anywhere; }
+    .lab-export { border-top: 1px solid #c3ccbd; padding-top: 24px; margin-top: 5px; }
+    .lab-method { margin-top: 22px; }
+    #copy-fallback { margin-top: 20px; }
+    #copy-fallback label { display: block; font-size: 13px; margin-bottom: 8px; }
+    /* 09 / Responsive and motion preferences */
+    @media (min-width: 1800px) { .hero-grid { min-height: 690px; } }
+    @media (max-width: 1000px) {
+      .navigation { gap: 22px; }
+      .hero-grid { grid-template-columns: 1.1fr .9fr; padding: 58px 0; min-height: 550px; }
+      .hero h1 { font-size: 58px; }
+      .hero-actions { gap: 20px; }
+      .hero-art .field { width: 130%; height: 350px; margin-left: -12%; }
+      .art-caption { margin-left: 0; }
+      .art-caption span { font-size: 9px; letter-spacing: 0; }
+      .work-grid { gap: 24px; }
+      .project-cover { height: 285px; }
+      .cover-type { font-size: 66px; }
+      .about-grid { gap: 45px; }
+      .note-row { grid-template-columns: 110px 1fr 24px; gap: 20px; }
+      .lab-grid { gap: 20px; }
+      .lab-editor, .lab-preview { padding: 24px; }
+    }
+    @media (max-width: 760px) {
+      :root { --gutter: 24px; }
+      html { scroll-padding-top: 24px; }
+      .nav { min-height: 78px; }
+      .brand-name { font-size: 16px; }
+      .brand small { font-size: 8px; }
+      .js .menu { display: inline-flex; align-items: center; justify-content: center; }
+      .js .navigation { display: none; position: absolute; top: 78px; left: 0; right: 0; padding: 24px; background: var(--dark); border-bottom: 1px solid var(--dark-line); }
+      .js .navigation.open { display: flex; align-items: stretch; flex-direction: column; gap: 10px; }
+      .navigation { flex-wrap: wrap; gap: 12px; }
+      .navigation > a { padding: 10px; }
+      .hero-grid { grid-template-columns: 1fr; gap: 0; padding: 48px 0 27px; }
+      .hero .eyebrow { margin-bottom: 27px; font-size: 10px; }
+      .hero h1 { font-size: clamp(41px, 9vw, 65px); letter-spacing: -1.8px; line-height: 1.25; }
+      .hero-intro { max-width: 480px; font-size: 15px; margin-top: 25px; }
+      .hero-actions { margin-top: 27px; gap: 25px; }
+      .hero-art { margin-top: 15px; width: min(100%,480px); justify-self: center; }
+      .hero-art .field { width: 100%; height: 245px; margin: 0; }
+      .art-caption { margin-top: 0; }
+      .hero-bottom { font-size: 11px; padding: 23px 0; }
+      .hero-bottom .domains { gap: 20px; flex-wrap: wrap; }
+      .hero-bottom .scroll { display: none; }
+      .work { padding: 58px 0 62px; }
+      .section-label { padding-bottom: 20px; font-size: 11px; }
+      .section-heading { display: block; margin: 28px 0 30px; }
+      .section-heading > p { margin-top: 22px; max-width: 480px; }
+      .section-heading h2 { font-size: 33px; }
+      .work-grid { grid-template-columns: 1fr; gap: 38px; }
+      .project-cover { height: 300px; }
+      .project-title h3 { font-size: 24px; }
+      .project-meta { margin-top: 20px; }
+      .website-cover { padding-top: 65px; }
+      .cover-type { font-size: 75px; }
+      .journal-home { padding-bottom: 57px; }
+      .journal-home .section-heading { display: flex; align-items: center; }
+      .journal-home h2 { font-size: 29px; }
+      .journal-home .section-heading .text-link { white-space: nowrap; font-size: 12px; gap: 7px; }
+      .note-row { grid-template-columns: 1fr 25px; gap: 15px; padding: 23px 0; }
+      .note-row .note-meta { grid-column: 1/-1; display: flex; justify-content: space-between; align-items: center; }
+      .note-row h3 { font-size: 20px; line-height: 1.5; }
+      .note-row p { font-size: 14px; }
+      .about { padding: 53px 0; }
+      .about-grid { grid-template-columns: 1fr; gap: 28px; margin-top: 30px; }
+      .about h2 { font-size: 32px; }
+      .about-copy { font-size: 15px; }
+      .about-domains { grid-template-columns: 1fr; gap: 27px; margin-top: 36px; }
+      .domain { display: grid; grid-template-columns: 35px 1fr; gap: 10px; }
+      .domain span { padding-top: 7px; }
+      .domain h3 { margin: 0; }
+      .domain p { grid-column: 2; margin: 0; }
+      .contact-note { line-height: 2; margin-top: 32px; }
+      .playground { padding: 48px 0; }
+      .playground-grid { grid-template-columns: 1fr; gap: 28px; }
+      .playground-grid .btn { justify-self: start; }
+      .footer-inner { align-items: start; padding-block: 30px; flex-direction: column; gap: 18px; }
+      .footer-right { width: 100%; justify-content: space-between; gap: 15px; font-size: 11px; }
+      .secondary { padding: 28px 0 55px; }
+      .secondary h1 { font-size: 33px; line-height: 1.45; letter-spacing: -.6px; }
+      .back-link { margin-bottom: 23px; }
+      .section-head { display: block; margin-bottom: 27px; }
+      .section-head > p, .lab-local { display: block; margin-top: 15px; }
+      .case-content h2 { font-size: 22px; }
+      .case-content p { font-size: 16px; }
+      .case-limit { padding: 20px; }
+      .note summary { gap: 12px; }
+      .note-title strong { font-size: 20px; }
+      .note-time { display: none; }
+      .note-content { padding: 0 0 25px; font-size: 16px; }
+      .lab-grid { grid-template-columns: 1fr; }
+      .lab-preview { position: static; }
+      .lab-editor, .lab-preview { padding: 22px; }
+    }
+    @media (max-width: 370px) {
+      :root { --gutter: 20px; }
+      .hero h1 { font-size: 39px; }
+      .hero-actions { gap: 15px; }
+      .hero-actions .btn { gap: 15px; padding-inline: 16px; }
+      .hero-actions .text-link { font-size: 13px; gap: 8px; }
+      .hero-bottom .domains { gap: 13px; font-size: 10px; }
+      .section-heading h2 { font-size: 29px; }
+      .journal-home .section-heading { display: block; }
+      .cover-top { left: 20px; right: 20px; font-size: 9px; }
+      .project-cover { height: 265px; }
+      .cover-type { font-size: 67px; }
+      .project-meta { font-size: 10px; gap: 8px; }
+      .about h2 { font-size: 29px; }
+      .lab-editor, .lab-preview { padding: 18px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
+    @media print {
+      body { background: white; color: black; }
+      .site-header, .site-footer, .motion, .lab-examples, .lab-actions, .lab-export, .back-link { display: none !important; }
+      .lab-preview { position: static; }
+      .hero, .about { background: #eee; color: #111; }
+      .hero-intro, .about-copy { color: #333; }
+      .wrap, .secondary { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">跳到正文</a>
+  <header class="site-header" id="top">
+    <div class="wrap nav">
+      <a class="brand" href="#top" aria-label="黄欣立的主页">
+        <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M5 5L27 27M27 5L5 27M16 1V31M1 16H31" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+        <span class="brand-name">黄欣立<small>HUANG XINLI</small></span>
+      </a>
+      <button class="menu" aria-label="打开导航" aria-controls="navigation" aria-expanded="false">☰</button>
+      <nav class="navigation" id="navigation" aria-label="主导航">
+        <a href="#world" data-nav="work">实践</a>
+        <a href="#journal" data-nav="notes">笔记</a>
+        <a href="#about" data-nav="about">关于</a>
+        <a class="nav-tool" href="#action-lab" data-nav="tool">探索行动卡 <span aria-hidden="true">↗</span></a>
+      </nav>
+    </div>
+  </header>
+  <main id="main" tabindex="-1">
+    <div data-view="home" id="home-view">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="wrap">
+          <div class="hero-grid">
+            <div class="hero-copy">
+              <p class="eyebrow">保持好奇 · 认真求证</p>
+              <h1 id="hero-title" tabindex="-1">把 AI 用进<br><span>真实问题里。</span></h1>
+              <p class="hero-intro">你好，我是黄欣立。<br>关注法律与商业、投资研究和社区协作，<br class="desktop-break">在具体实践中，探索人与 AI 如何一起工作。</p>
+              <div class="hero-actions">
+                <a class="btn btn-light" href="#world">查看精选实践 <span aria-hidden="true">↓</span></a>
+                <a class="text-link" href="#journal">读几条笔记 <span class="arrow" aria-hidden="true">↗</span></a>
+              </div>
+            </div>
+            <figure class="hero-art" aria-label="原创线条构成：不同路径汇聚，形成一片流动的曲面">
+              <svg class="field" id="field" viewBox="0 0 660 560" fill="none" aria-hidden="true"><defs><linearGradient id="copper" x1="0" y1="450" x2="620" y2="140" gradientUnits="userSpaceOnUse"><stop stop-color="#536454"/><stop offset=".36" stop-color="#c2bc98"/><stop offset=".67" stop-color="#e9bb92"/><stop offset="1" stop-color="#8b5b3f"/></linearGradient></defs><g class="field-lines" stroke="url(#copper)" stroke-width="1.05"><path d="M -70.0 440.0 C 100.0 475.0, 140.0 55.0, 315.0 95.0 S 500.0 440.0, 710.0 95.0" opacity="0.55"/><path d="M -69.8 441.2 C 99.6 474.2, 140.2 60.2, 315.5 98.8 S 500.1 437.8, 709.6 97.9" opacity="0.57"/><path d="M -69.5 442.5 C 99.1 473.5, 140.4 65.4, 316.1 102.5 S 500.2 435.5, 709.1 100.7" opacity="0.59"/><path d="M -69.2 443.8 C 98.7 472.8, 140.5 70.5, 316.6 106.2 S 500.3 433.3, 708.7 103.6" opacity="0.62"/><path d="M -69.0 445.0 C 98.2 472.0, 140.7 75.7, 317.1 110.0 S 500.4 431.1, 708.2 106.4" opacity="0.64"/><path d="M -68.8 446.2 C 97.8 471.2, 140.9 80.9, 317.7 113.8 S 500.4 428.8, 707.8 109.3" opacity="0.66"/><path d="M -68.5 447.5 C 97.3 470.5, 141.1 86.1, 318.2 117.5 S 500.5 426.6, 707.3 112.1" opacity="0.68"/><path d="M -68.2 448.8 C 96.9 469.8, 141.2 91.2, 318.8 121.2 S 500.6 424.4, 706.9 115.0" opacity="0.70"/><path d="M -68.0 450.0 C 96.4 469.0, 141.4 96.4, 319.3 125.0 S 500.7 422.1, 706.4 117.9" opacity="0.72"/><path d="M -67.8 451.2 C 96.0 468.2, 141.6 101.6, 319.8 128.8 S 500.8 419.9, 706.0 120.7" opacity="0.74"/><path d="M -67.5 452.5 C 95.5 467.5, 141.8 106.8, 320.4 132.5 S 500.9 417.7, 705.5 123.6" opacity="0.76"/><path d="M -67.2 453.8 C 95.1 466.8, 142.0 112.0, 320.9 136.2 S 501.0 415.4, 705.1 126.4" opacity="0.78"/><path d="M -67.0 455.0 C 94.6 466.0, 142.1 117.1, 321.4 140.0 S 501.1 413.2, 704.6 129.3" opacity="0.80"/><path d="M -66.8 456.2 C 94.2 465.2, 142.3 122.3, 322.0 143.8 S 501.2 411.0, 704.2 132.1" opacity="0.82"/><path d="M -66.5 457.5 C 93.8 464.5, 142.5 127.5, 322.5 147.5 S 501.2 408.8, 703.8 135.0" opacity="0.83"/><path d="M -66.2 458.8 C 93.3 463.8, 142.7 132.7, 323.0 151.2 S 501.3 406.5, 703.3 137.9" opacity="0.85"/><path d="M -66.0 460.0 C 92.9 463.0, 142.9 137.9, 323.6 155.0 S 501.4 404.3, 702.9 140.7" opacity="0.86"/><path d="M -65.8 461.2 C 92.4 462.2, 143.0 143.0, 324.1 158.8 S 501.5 402.1, 702.4 143.6" opacity="0.88"/><path d="M -65.5 462.5 C 92.0 461.5, 143.2 148.2, 324.6 162.5 S 501.6 399.8, 702.0 146.4" opacity="0.89"/><path d="M -65.2 463.8 C 91.5 460.8, 143.4 153.4, 325.2 166.2 S 501.7 397.6, 701.5 149.3" opacity="0.90"/><path d="M -65.0 465.0 C 91.1 460.0, 143.6 158.6, 325.7 170.0 S 501.8 395.4, 701.1 152.1" opacity="0.91"/><path d="M -64.8 466.2 C 90.6 459.2, 143.8 163.8, 326.2 173.8 S 501.9 393.1, 700.6 155.0" opacity="0.92"/><path d="M -64.5 467.5 C 90.2 458.5, 143.9 168.9, 326.8 177.5 S 502.0 390.9, 700.2 157.9" opacity="0.93"/><path d="M -64.2 468.8 C 89.7 457.8, 144.1 174.1, 327.3 181.2 S 502.1 388.7, 699.7 160.7" opacity="0.93"/><path d="M -64.0 470.0 C 89.3 457.0, 144.3 179.3, 327.9 185.0 S 502.1 386.4, 699.3 163.6" opacity="0.94"/><path d="M -63.8 471.2 C 88.8 456.2, 144.5 184.5, 328.4 188.8 S 502.2 384.2, 698.8 166.4" opacity="0.94"/><path d="M -63.5 472.5 C 88.4 455.5, 144.6 189.6, 328.9 192.5 S 502.3 382.0, 698.4 169.3" opacity="0.95"/><path d="M -63.2 473.8 C 87.9 454.8, 144.8 194.8, 329.5 196.2 S 502.4 379.7, 697.9 172.1" opacity="0.95"/><path d="M -63.0 475.0 C 87.5 454.0, 145.0 200.0, 330.0 200.0 S 502.5 377.5, 697.5 175.0" opacity="0.95"/><path d="M -62.8 476.2 C 87.1 453.2, 145.2 205.2, 330.5 203.8 S 502.6 375.3, 697.1 177.9" opacity="0.95"/><path d="M -62.5 477.5 C 86.6 452.5, 145.4 210.4, 331.1 207.5 S 502.7 373.0, 696.6 180.7" opacity="0.95"/><path d="M -62.2 478.8 C 86.2 451.8, 145.5 215.5, 331.6 211.2 S 502.8 370.8, 696.2 183.6" opacity="0.94"/><path d="M -62.0 480.0 C 85.7 451.0, 145.7 220.7, 332.1 215.0 S 502.9 368.6, 695.7 186.4" opacity="0.94"/><path d="M -61.8 481.2 C 85.3 450.2, 145.9 225.9, 332.7 218.8 S 502.9 366.3, 695.3 189.3" opacity="0.93"/><path d="M -61.5 482.5 C 84.8 449.5, 146.1 231.1, 333.2 222.5 S 503.0 364.1, 694.8 192.1" opacity="0.93"/><path d="M -61.2 483.8 C 84.4 448.8, 146.2 236.2, 333.8 226.2 S 503.1 361.9, 694.4 195.0" opacity="0.92"/><path d="M -61.0 485.0 C 83.9 448.0, 146.4 241.4, 334.3 230.0 S 503.2 359.6, 693.9 197.9" opacity="0.91"/><path d="M -60.8 486.2 C 83.5 447.2, 146.6 246.6, 334.8 233.8 S 503.3 357.4, 693.5 200.7" opacity="0.90"/><path d="M -60.5 487.5 C 83.0 446.5, 146.8 251.8, 335.4 237.5 S 503.4 355.2, 693.0 203.6" opacity="0.89"/><path d="M -60.2 488.8 C 82.6 445.8, 147.0 257.0, 335.9 241.2 S 503.5 352.9, 692.6 206.4" opacity="0.88"/><path d="M -60.0 490.0 C 82.1 445.0, 147.1 262.1, 336.4 245.0 S 503.6 350.7, 692.1 209.3" opacity="0.86"/><path d="M -59.8 491.2 C 81.7 444.2, 147.3 267.3, 337.0 248.8 S 503.7 348.5, 691.7 212.1" opacity="0.85"/><path d="M -59.5 492.5 C 81.2 443.5, 147.5 272.5, 337.5 252.5 S 503.8 346.2, 691.2 215.0" opacity="0.83"/><path d="M -59.2 493.8 C 80.8 442.8, 147.7 277.7, 338.0 256.2 S 503.8 344.0, 690.8 217.9" opacity="0.82"/><path d="M -59.0 495.0 C 80.4 442.0, 147.9 282.9, 338.6 260.0 S 503.9 341.8, 690.4 220.7" opacity="0.80"/><path d="M -58.8 496.2 C 79.9 441.2, 148.0 288.0, 339.1 263.8 S 504.0 339.6, 689.9 223.6" opacity="0.78"/><path d="M -58.5 497.5 C 79.5 440.5, 148.2 293.2, 339.6 267.5 S 504.1 337.3, 689.5 226.4" opacity="0.76"/><path d="M -58.2 498.8 C 79.0 439.8, 148.4 298.4, 340.2 271.2 S 504.2 335.1, 689.0 229.3" opacity="0.74"/><path d="M -58.0 500.0 C 78.6 439.0, 148.6 303.6, 340.7 275.0 S 504.3 332.9, 688.6 232.1" opacity="0.72"/><path d="M -57.8 501.2 C 78.1 438.2, 148.8 308.8, 341.2 278.8 S 504.4 330.6, 688.1 235.0" opacity="0.70"/><path d="M -57.5 502.5 C 77.7 437.5, 148.9 313.9, 341.8 282.5 S 504.5 328.4, 687.7 237.9" opacity="0.68"/><path d="M -57.2 503.8 C 77.2 436.8, 149.1 319.1, 342.3 286.2 S 504.6 326.2, 687.2 240.7" opacity="0.66"/><path d="M -57.0 505.0 C 76.8 436.0, 149.3 324.3, 342.9 290.0 S 504.6 323.9, 686.8 243.6" opacity="0.64"/><path d="M -56.8 506.2 C 76.3 435.2, 149.5 329.5, 343.4 293.8 S 504.7 321.7, 686.3 246.4" opacity="0.62"/><path d="M -56.5 507.5 C 75.9 434.5, 149.6 334.6, 343.9 297.5 S 504.8 319.5, 685.9 249.3" opacity="0.59"/><path d="M -56.2 508.8 C 75.4 433.8, 149.8 339.8, 344.5 301.2 S 504.9 317.2, 685.4 252.1" opacity="0.57"/><path d="M -56.0 510.0 C 75.0 433.0, 150.0 345.0, 345.0 305.0 S 505.0 315.0, 685.0 255.0" opacity="0.55"/></g><g stroke="#d0bda3" opacity=".55"><path d="M20 70H34M27 63V77M595 470H609M602 463V477"/></g></svg>
+              <figcaption class="art-caption"><span class="mono">A FIELD OF POSSIBILITIES</span><button class="motion" id="motion" aria-pressed="false">播放线条动效 ↗</button></figcaption>
+            </figure>
+          </div>
+          <div class="hero-bottom"><div class="domains"><span>法律与商业</span><span>投资研究</span><span>社区协作</span></div><span class="scroll mono">EXPLORE BELOW ↓</span></div>
+        </div>
+      </section>
+      <section class="work wrap" id="world" aria-labelledby="world-title">
+        <div class="section-label"><span>01 / 精选实践</span><span class="mono">SELECTED WORK</span></div>
+        <div class="section-heading"><h2 id="world-title" tabindex="-1">从一个问题，<br>走到一次实践。</h2><p>记录做了什么、为什么这样做，<br>以及哪些问题，还需要继续验证。</p></div>
+        <div class="work-grid">
+          <a class="work-card" href="#case-research">
+            <div class="project-cover research-cover" aria-hidden="true">
+              <div class="cover-top"><span>RESEARCH / 01</span><span>METHOD STUDY</span></div>
+              <svg viewBox="0 0 660 340"><defs><pattern id="grid" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M28 0H0V28" fill="none" stroke="#c7dac5" stroke-opacity=".1" stroke-width=".6"/></pattern></defs><rect width="660" height="340" fill="url(#grid)"/><g fill="none" stroke="#d7dfcb"><circle cx="330" cy="170" r="94" stroke-opacity=".22"/><circle cx="330" cy="170" r="65" stroke-opacity=".2"/><path d="M120 170H264M396 170H540M330 80V105M330 235V268" stroke-opacity=".5"/><path d="M120 170C180 70 260 70 330 80M540 170C480 270 400 270 330 268" stroke-dasharray="3 5" stroke-opacity=".4"/></g><g fill="#b9cdb7"><circle cx="120" cy="170" r="4"/><circle cx="540" cy="170" r="4"/><circle cx="330" cy="80" r="3"/><circle cx="330" cy="268" r="3"/></g><g fill="#dce3d3" text-anchor="middle" font-family="system-ui,sans-serif"><text x="330" y="165" font-size="24">可复核的判断</text><text x="330" y="190" font-size="10" letter-spacing="3">EVIDENCE FIRST</text><text x="120" y="150" font-size="14">来源</text><text x="540" y="150" font-size="14">反证</text><text x="330" y="60" font-size="12">条件</text></g></svg>
+              <div class="cover-bottom">信息 → 核验 → 研究 → 复核 <span>流程示意</span></div>
+            </div>
+            <div class="project-meta"><span>AI × 投资研究</span><span class="status">方法探索</span></div>
+            <div class="project-title"><h3>A 股研究工作台</h3><span class="arrow" aria-hidden="true">↗</span></div>
+            <p class="project-description">把信息来源、研究条件和反证放在一起。让判断有来处，也留下再次检验的入口。</p>
+          </a>
+          <a class="work-card" href="#case-homepage">
+            <div class="project-cover website-cover" aria-hidden="true"><div class="cover-top"><span>PERSONAL / 02</span><span>AN OPEN EXPLORATION</span></div><div class="cover-type">Hello,<br><i>world.</i></div><p class="cover-sub">从认识自己，到被人认识。</p></div>
+            <div class="project-meta"><span>AI × 个人表达</span><span class="status">持续迭代</span></div>
+            <div class="project-title"><h3>让主页，真正像自己</h3><span class="arrow" aria-hidden="true">↗</span></div>
+            <p class="project-description">从挑选一个喜欢的外观，到想清楚别人为何而来。这也是一次关于表达与取舍的实践。</p>
+          </a>
+        </div>
+      </section>
+      <section class="journal-home wrap" aria-labelledby="notes-home-title">
+        <div class="section-label"><span>02 / 思考记录</span><span class="mono">FIELD NOTES</span></div>
+        <div class="section-heading"><h2 id="notes-home-title">边做，边想。</h2><a class="text-link" href="#journal">全部笔记 <span class="arrow" aria-hidden="true">↗</span></a></div>
+        <div class="notes-rows">
+          <a class="note-row" href="#note-evidence"><div class="note-meta">研究方法<small>2026.10.15</small></div><div><h3>依据与反证，应该一起出现。</h3><p>结论之外，也留下可以推翻它的条件。</p></div><span class="arrow" aria-hidden="true">↗</span></a>
+          <a class="note-row" href="#note-curiosity"><div class="note-meta">持续学习<small>2026.10.15</small></div><div><h3>学新东西，不必先证明它有用。</h3><p>给理解本身，也留一点空间。</p></div><span class="arrow" aria-hidden="true">↗</span></a>
+          <a class="note-row" href="#note-website"><div class="note-meta">个人表达<small>2026.10.15</small></div><div><h3>做主页之前，先想清楚别人来看什么。</h3><p>让具体的实践，先于宽泛的标签出现。</p></div><span class="arrow" aria-hidden="true">↗</span></a>
+        </div>
+      </section>
+      <section class="about" id="about" aria-labelledby="about-title"><div class="wrap">
+        <div class="section-label"><span>03 / 关于我</span><span class="mono">A LITTLE CONTEXT</span></div>
+        <div class="about-grid"><h2 id="about-title" tabindex="-1">认真对待问题。<br><span>也认真保留好奇心。</span></h2><div class="about-copy"><p>我关心 AI 如何进入具体工作：帮助理解材料、组织信息，也帮助我们发现还没想清楚的问题。</p><p>这个主页记录正在尝试的事情和过程中的思考。希望留下的，是能够继续讨论、继续检验的内容。</p></div></div>
+        <div class="about-domains"><div class="domain"><span>01</span><h3>法律与商业</h3><p>关注规则、事实与商业选择之间的关系。</p></div><div class="domain"><span>02</span><h3>投资研究</h3><p>关注信息质量、判断依据与后续复核。</p></div><div class="domain"><span>03</span><h3>社区协作</h3><p>关注知识如何被理解、分享并用于实践。</p></div></div>
+        <p class="contact-note"><strong>关于联系</strong>公开联系渠道暂未提供。</p>
+      </div></section>
+      <section class="playground" aria-labelledby="playground-title"><div class="wrap playground-grid"><div><p class="eyebrow">一个可以亲手试试的小工具</p><h2 id="playground-title">下一个想法，从一步开始。</h2><p>用五个问题，整理目标、交付物和验收条件。<br>行动卡仅在浏览器中整理文字，不调用 AI。</p></div><a class="btn btn-dark" href="#action-lab">打开行动卡 <span class="arrow" aria-hidden="true">↗</span></a></div></section>
+    </div>
+    <section data-view="tool" class="secondary action-lab" id="action-lab" aria-labelledby="lab-title"><a class="back-link" href="#top">← 返回首页</a><div class="section-head"><div><div class="section-id">PLAYGROUND / 01</div><h1 id="lab-title" tabindex="-1">把一个想法，变成下一步。</h1></div><span class="lab-local"><span class="status-dot"></span>浏览器内运行 · 无需提交资料</span></div><p class="lab-intro">用五个问题，把想做的事写清楚。先试一个示例，或从你的想法开始。</p><div class="lab-examples"><span>试一试</span><button type="button" data-example="work">做一次小型分享 ↗</button><button type="button" data-example="learn">学会一个 AI 工具 ↗</button><button type="button" data-example="life">开始每周运动 ↗</button><button type="button" id="lab-undo" hidden>撤销上次替换</button></div><div class="lab-grid"><form id="action-form" class="lab-editor"><div class="lab-editor-top"><span>01 / 写清楚</span><span id="lab-progress" aria-live="polite">已填写 0 / 5 项</span></div>
+<label for="ac-idea">你想做什么？<span>01</span></label><input id="ac-idea" name="idea" maxlength="120" required placeholder="例如：给同事做一次 AI 工具分享" autocomplete="off">
+<label for="ac-outcome">最后要留下什么？<span>02</span></label><textarea id="ac-outcome" name="outcome" maxlength="600" rows="2" required placeholder="写一个看得见的交付物，例如：一份讲义 + 一个可操作的示例"></textarea>
+<label for="ac-first">下一步，具体做什么？<span>03</span></label><textarea id="ac-first" name="first" maxlength="600" rows="2" required placeholder="把第一步缩小到一次能完成的动作，例如：今天用 20 分钟列出 3 个真实问题"></textarea>
+<label for="ac-check">怎么判断这次做到了？<span>04</span></label><textarea id="ac-check" name="check" maxlength="600" rows="2" required placeholder="写一个可检查的条件，例如：一位同事能照着讲义独立完成示例"></textarea>
+<label for="ac-review">什么时候回来检查？<span>05</span></label><input id="ac-review" name="review" maxlength="120" required placeholder="例如：本周五 18:00，检查讲义和试用反馈" autocomplete="off">
+<details class="lab-extra"><summary>补充依据或限制（选填）</summary><label for="ac-basis">已经知道什么，还缺什么？</label><textarea id="ac-basis" name="basis" maxlength="1000" rows="3" placeholder="例如：已有两个演示案例；准备时间不超过 2 小时；还需要确认同事最关心的问题"></textarea></details>
+<div class="lab-actions"><button class="primary" type="submit">生成行动卡 <span aria-hidden="true">↗</span></button><button class="lab-secondary" id="lab-save" type="button">保存草稿</button><button class="lab-text-button" id="lab-clear" type="button">清空</button></div><p class="lab-status" id="lab-status" role="status">内容仅在此页面处理；点击“保存草稿”才会存入当前浏览器。</p></form>
+<aside class="lab-preview" aria-labelledby="card-heading"><div class="preview-top"><span class="mono">ACTION CARD</span><span id="card-state" class="state-chip">待填写</span></div><h3 id="card-heading" tabindex="-1">你的下一步，从这里开始。</h3><p class="card-hint" id="card-hint">左侧填写，右侧实时预览。完成后生成并带走。</p><dl id="action-output"><div><dt>交付物 / OUTCOME</dt><dd id="out-outcome">最后留下什么？</dd></div><div><dt>第一步 / NEXT ACTION</dt><dd id="out-first">先完成一个具体动作。</dd></div><div><dt>验收条件 / CHECK</dt><dd id="out-check">用可观察的结果来判断。</dd></div><div><dt>复盘时间 / REVIEW</dt><dd id="out-review">给自己一个回来检查的时间。</dd></div><div id="out-basis-row" hidden><dt>依据与限制 / CONTEXT</dt><dd id="out-basis"></dd></div></dl><div class="lab-export"><button type="button" id="lab-copy" class="lab-secondary" disabled>复制卡片</button><button type="button" id="lab-download" class="lab-secondary" disabled>下载 Markdown ↓</button></div><div id="copy-fallback" hidden><label for="copy-text">浏览器未允许自动复制，请选中以下文本复制：</label><textarea id="copy-text" readonly rows="6"></textarea></div><p class="lab-method">这是一张结构化整理卡，不调用 AI，也不判断方案是否可行。内容和验收条件由你决定。</p></aside></div></section>
+    <section data-view="notes" class="secondary notes-page" id="journal" aria-labelledby="journal-title"><a class="back-link" href="#top">← 返回首页</a><div class="section-head"><div><div class="section-id">FIELD NOTES</div><h1 id="journal-title" tabindex="-1">边做，边想。</h1></div><p>三个问题，留在这里继续追问。</p></div><div class="notes-list">
+<details class="note" id="note-evidence"><summary><span class="note-num">01</span><span class="note-title"><strong>依据与反证，应该一起出现。</strong><small>关于 AI 判断与研究方法</small></span><span class="note-time">2026.10.15</span><span class="detail-toggle" aria-hidden="true">＋</span></summary><div class="note-content"><p>让 AI 给出一个结论并不难。更值得追问的是：这个结论依据什么？哪些条件还没有满足？出现什么情况，需要放弃原来的判断？</p><p>在整理投研流程时，我越来越在意这些问题能否直接出现在页面上。如果只看到结论，后续很难判断究竟发生了什么变化。</p><blockquote>下一次再看这份研究，我能不能找到当时的依据，也看到当时留下的疑问？</blockquote><p>这是我希望持续检查的一件事。</p></div></details>
+<details class="note" id="note-curiosity"><summary><span class="note-num">02</span><span class="note-title"><strong>学新东西，不必先证明它有用。</strong><small>关于社区阅读与持续学习</small></span><span class="note-time">2026.10.15</span><span class="detail-toggle" aria-hidden="true">＋</span></summary><div class="note-content"><p>看 AI 社区里的分享时，有些内容我还不理解，也暂时想不到它和自己的工作有什么关系。但我仍然希望看懂：大家在尝试什么？这里面有哪些值得吸收的知识？</p><p>如果每次都急着找用途，可能会错过理解一个新方向的机会。我想给这种学习留一点空间，先弄明白问题，再决定是否深入。</p><blockquote>理解本身，也可以是这次阅读的收获。</blockquote></div></details>
+<details class="note" id="note-website"><summary><span class="note-num">03</span><span class="note-title"><strong>做主页之前，先想清楚别人来看什么。</strong><small>关于这次个人主页改版</small></span><span class="note-time">2026.10.15</span><span class="detail-toggle" aria-hidden="true">＋</span></summary><div class="note-content"><p>这次做主页，我先挑风格，再调整视觉。直到页面能看了，才开始认真问它的用途。</p><p>对我来说，一个可以持续使用的主页，应该让人看到我正在关心什么、尝试什么，也知道可以和我交流什么。两个写清楚的案例，可能比一排宽泛的身份标签更有帮助。</p><blockquote>如果把名字换掉，这个页面还完全成立，那它可能还不够像我。</blockquote><p>现在补进来的内容，就是朝这个方向迈出的第一步。</p></div></details>
+</div></section>
+    <article class="secondary reading-page" id="case-research" data-view="case-research"><a class="back-link" href="#world">← 返回精选实践</a><div class="section-id">AI × 投资研究</div><h1 tabindex="-1">A 股研究工作台</h1><div class="case-content"><h2>从什么问题开始</h2><p>我希望每轮研究都尽可能中立、客观地寻找符合交易逻辑的标的，并能直接看到候选对象的依据和未满足条件。</p><h2>尝试怎样做</h2><p>围绕“信息获取—来源核验—条件研究—复核记录”组织流程，让 AI 协助整理材料和呈现信息，把依据、缺口与反证一起展示。</p><h2>目前做到哪里</h2><p>截至 2026 年 10 月 15 日的案例记录，工作台已包含研究进度、市场指数观察、来源优先级、运行缺口和个股详情等栏目。本页展示的是研究方法与流程示意，不包含实时行情或具体交易建议。</p><div class="case-limit"><strong>还需要继续验证</strong><p>数据覆盖、连续运行稳定性，以及研究结论能否经受后续检验。做出了界面，并不等于策略效果已经得到证明。</p></div><p class="case-date">案例整理：2026.10.15 · 状态：研究工具探索</p></div><a class="back-link reading-end" href="#world">← 返回精选实践</a></article>
+    <article class="secondary reading-page" id="case-homepage" data-view="case-homepage" aria-labelledby="homepage-title">
+      <a class="back-link" href="#world">← 返回精选实践</a>
+      <p class="section-id">AI × 个人表达 / 02</p>
+      <h1 id="homepage-title" tabindex="-1">让个人主页，<br>真正像自己。</h1>
+      <div class="case-content">
+        <h2>从外观，走向表达</h2><p>最初做主页时，我先挑选视觉风格。页面能看了之后，才继续追问：别人来这里，应该了解什么？具体的实践、持续关心的问题和思考过程，逐渐成为内容的主线。</p>
+        <h2>这一次，把内容重新组织</h2><p>用一句话介绍关注的方向，接着展示两项实践，再让笔记和个人关注出现。每个项目有独立的视觉与说明，让页面的阅读有停顿，也有继续深入的入口。</p>
+        <h2>保留可以亲手体验的部分</h2><p>行动卡仍是一个可以填写、保存和导出的小工具。它帮助整理想法，但不会替人判断，也不会自动完成任务。工具的价值，需要在真实使用中继续检验。</p>
+        <div class="case-limit"><strong>当前阶段</strong><p>本页持续迭代中。公开联系方式和更多可展示的项目材料仍待补充，页面的交流效果也尚未验证。</p></div>
+        <p class="case-date">改版记录：2026.10.22 · 状态：持续迭代</p>
+      </div>
+      <a class="back-link reading-end" href="#world">← 返回精选实践</a>
+    </article>
+  </main>
+  <footer class="site-footer"><div class="wrap footer-inner"><a class="footer-brand" href="#top">黄欣立 <span aria-hidden="true">↗</span></a><div class="footer-right"><span>© <span id="year">2026</span> · 保持好奇，认真求证。</span><a class="text-link" href="#top">回到首页 ↑</a></div></div></footer>
+  <noscript><p class="wrap">浏览器未启用 JavaScript，案例和笔记以连续页面展示。行动卡的保存与导出需要启用 JavaScript。</p></noscript>
+  <script id="navigation-script">
+    (() => {
+      'use strict';
+      document.documentElement.classList.add('js');
+      const menu = document.querySelector('.menu');
+      const nav = document.getElementById('navigation');
+      const views = [...document.querySelectorAll('[data-view]')];
+      const motion = document.getElementById('motion');
+      const field = document.getElementById('field');
+      const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+      let playing = false;
+      let inView = true;
+      let firstRoute = true;
+      const titles = {
+        home: '黄欣立 — 把 AI 用进真实问题里',
+        tool: '行动卡 · 黄欣立', notes: '笔记 · 黄欣立',
+        'case-research': 'A 股研究工作台 · 黄欣立',
+        'case-homepage': '让主页，真正像自己 · 黄欣立'
+      };
+      function closeMenu(returnFocus = false) {
+        nav.classList.remove('open');
+        menu.setAttribute('aria-expanded', 'false');
+        menu.setAttribute('aria-label', '打开导航');
+        if (returnFocus) menu.focus();
+      }
+      menu.addEventListener('click', () => {
+        const open = nav.classList.toggle('open');
+        menu.setAttribute('aria-expanded', String(open));
+        menu.setAttribute('aria-label', open ? '关闭导航' : '打开导航');
+      });
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && nav.classList.contains('open')) closeMenu(true);
+      });
+      document.addEventListener('click', e => {
+        if (!e.target.closest('.nav')) closeMenu();
+      });
+      function syncMotion() {
+        const active = playing && !document.hidden && inView && !document.getElementById('home-view').hidden;
+        field.classList.toggle('is-playing', active);
+        motion.setAttribute('aria-pressed', String(playing));
+        motion.textContent = playing ? '暂停线条动效 Ⅱ' : '播放线条动效 ↗';
+      }
+      motion.addEventListener('click', () => {
+        if (reduced.matches) {
+          motion.textContent = '已遵循系统减少动态效果设置';
+          return;
+        }
+        playing = !playing;
+        syncMotion();
+      });
+      reduced.addEventListener('change', () => { if (reduced.matches) playing = false; syncMotion(); });
+      document.addEventListener('visibilitychange', syncMotion);
+      if ('IntersectionObserver' in window) new IntersectionObserver(entries => { inView = entries[0].isIntersecting; syncMotion(); }).observe(field);
+      function route() {
+        let id;
+        try { id = decodeURIComponent(location.hash.slice(1)); } catch { id = ''; }
+        const target = document.getElementById(id);
+        const note = target && target.matches('details.note') ? target : null;
+        const page = id === 'action-lab' ? 'tool' : (id === 'journal' || note) ? 'notes' : ['case-research', 'case-homepage'].includes(id) ? id : 'home';
+        views.forEach(view => { view.hidden = view.dataset.view !== page; });
+        if (note) note.open = true;
+        document.title = note ? note.querySelector('strong').textContent + ' · 黄欣立' : titles[page];
+        const navKey = page === 'tool' ? 'tool' : page === 'notes' ? 'notes' : page.startsWith('case-') || id === 'world' ? 'work' : id === 'about' ? 'about' : '';
+        nav.querySelectorAll('[data-nav]').forEach(link => {
+          if (link.dataset.nav === navKey) link.setAttribute('aria-current', page === 'home' ? 'location' : 'page');
+          else link.removeAttribute('aria-current');
+        });
+        closeMenu();
+        syncMotion();
+        // Do not steal initial keyboard focus. All known old fragment URLs remain valid.
+        if (firstRoute && !id) { firstRoute = false; return; }
+        firstRoute = false;
+        requestAnimationFrame(() => {
+          const section = page === 'home' ? (['world', 'about', 'main'].includes(id) ? target : document.getElementById('top')) : note || views.find(view => view.dataset.view === page);
+          if (!section) return;
+          section.scrollIntoView({block: 'start', behavior: 'instant'});
+          const heading = note ? note.querySelector('summary') : section.querySelector('h1,h2') || (id === 'main' ? section : document.getElementById('hero-title'));
+          if (heading) heading.focus({preventScroll: true});
+        });
+      }
+      window.addEventListener('hashchange', route);
+      document.querySelectorAll('a[href^="#"]').forEach(link => link.addEventListener('click', e => {
+        if (link.hash === location.hash) { e.preventDefault(); route(); }
+      }));
+      document.getElementById('year').textContent = new Date().getFullYear();
+      route();
+    })();
+  </script>
+  <script id="action-lab-script">
+(()=>{
+'use strict';
+const key='hx-action-card-draft-v1',names=['idea','outcome','first','check','review','basis'],required=names.slice(0,5),byId=id=>document.getElementById(id),fields=Object.fromEntries(names.map(n=>[n,byId('ac-'+n)]));
+const form=byId('action-form'),status=byId('lab-status'),copy=byId('lab-copy'),download=byId('lab-download');let generated=false,undo=null;
+const examples={
+work:{idea:'给同事做一次 20 分钟的 AI 工具分享',outcome:'一份简短讲义、一个可操作的演示案例，以及一页常见问题。',first:'今天用 20 分钟列出同事工作中的 3 个真实问题，选一个做演示。',check:'邀请一位同事试用；他能只看讲义完成示例，并说清楚一个使用限制。',review:'分享前一天 18:00，检查讲义、演示和试用反馈。',basis:'准备时间不超过 2 小时；只使用虚构或可公开的材料；还需要确认同事最关心的问题。'},
+learn:{idea:'学会用一个 AI 工具整理会议笔记',outcome:'一份操作说明，以及一组整理前后的会议笔记示例。',first:'今天找一段可公开的会议文字，用 15 分钟尝试提取决定、负责人和下一步。',check:'整理结果与原文逐项核对，不能漏掉决定，也不能补出原文没有的负责人或期限。',review:'本周日 17:00，再用第二份材料独立完成一次，并记录仍需人工修正的地方。',basis:'先选一个工具；使用演示材料；不把一次成功当作每次都可靠。'},
+life:{idea:'建立每周两次散步的习惯',outcome:'一周内两次散步记录，每次记下日期、时长和感受。',first:'今天在日历里选两个方便的时间，各留出 20 分钟。',check:'本周完成两次自己感觉舒适的散步，并留下两条简单记录。',review:'本周日晚上回看记录，决定下周保留还是调整时间。',basis:'以自身舒适为前提；遇到天气或身体不适，调整安排。'}
+};
+function read(){return Object.fromEntries(names.map(n=>[n,fields[n].value.trim()]))}
+function raw(){return Object.fromEntries(names.map(n=>[n,fields[n].value]))}
+function apply(values){names.forEach(n=>{fields[n].value=typeof values[n]==='string'?values[n].slice(0,fields[n].maxLength):'';fields[n].setCustomValidity('')});generated=false;render()}
+function say(message){status.textContent=message}
+function render(){const d=read(),count=required.filter(n=>d[n]).length;byId('lab-progress').textContent=`已填写 ${count} / 5 项`;byId('card-heading').textContent=d.idea||'你的下一步，从这里开始。';const defaults={outcome:'最后留下什么？',first:'先完成一个具体动作。',check:'用可观察的结果来判断。',review:'给自己一个回来检查的时间。',basis:''};Object.keys(defaults).forEach(n=>{byId('out-'+n).textContent=d[n]||defaults[n]});byId('out-basis-row').hidden=!d.basis;byId('card-state').textContent=generated?'已生成':count?'草稿':'待填写';byId('card-hint').textContent=generated?'五个问题已填写。可以复制或下载，带走你的下一步。':count===5?'五项已填写，点击“生成行动卡”完成整理。':'左侧填写，右侧实时预览。完成后生成并带走。';copy.disabled=download.disabled=!generated;byId('copy-fallback').hidden=true}
+function remember(){undo=raw();byId('lab-undo').hidden=false}
+form.addEventListener('input',e=>{if(e.target.setCustomValidity)e.target.setCustomValidity('');const wasGenerated=generated;generated=false;render();if(wasGenerated)say('内容已修改，请重新生成卡片后复制或下载。')});
+form.addEventListener('submit',e=>{e.preventDefault();for(const n of required){fields[n].setCustomValidity(fields[n].value.trim()?'':'请填写具体内容，不能只输入空格。')}if(!form.reportValidity())return;generated=true;render();say('行动卡已生成。请再检查：第一步是否足够具体，验收条件能否观察？');byId('card-heading').focus({preventScroll:true});byId('card-heading').scrollIntoView({block:'nearest',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'})});
+document.querySelectorAll('[data-example]').forEach(button=>button.addEventListener('click',()=>{remember();apply(examples[button.dataset.example]);say('已填入示例。你可以修改任意内容；上方“撤销上次替换”可恢复原来的填写。示例尚未保存。')}));
+byId('lab-undo').addEventListener('click',()=>{if(!undo)return;apply(undo);undo=null;byId('lab-undo').hidden=true;say('已恢复替换前的页面内容。如需留存，请点击“保存草稿”。')});
+byId('lab-save').addEventListener('click',()=>{try{localStorage.setItem(key,JSON.stringify({version:1,fields:raw()}));say('草稿已保存在当前浏览器。刷新本页面可恢复；不会自动同步到其他设备。')}catch{say('当前浏览器不允许保存。页面内容还在，你可以生成后复制或下载。')}});
+byId('lab-clear').addEventListener('click',()=>{remember();apply({});let removed=true;try{localStorage.removeItem(key)}catch{removed=false}say(removed?'已清空页面并删除此工具保存的草稿。可撤销本次清空，恢复页面内容。':'页面已清空，但未能删除浏览器草稿。请通过浏览器站点数据设置删除；也可撤销清空。')});
+function cardText(){const d=read();return '# 行动卡\n\n## 想做的事\n'+d.idea+'\n\n## 交付物\n'+d.outcome+'\n\n## 第一步\n'+d.first+'\n\n## 验收条件\n'+d.check+'\n\n## 复盘时间\n'+d.review+(d.basis?'\n\n## 依据与限制\n'+d.basis:'')+'\n\n---\n由黄欣立个人主页的行动卡工具整理。内容由填写者提供，未经过 AI 判断。\n'}
+copy.addEventListener('click',async()=>{if(!generated)return;const text=cardText();try{if(!navigator.clipboard)throw new Error('clipboard unavailable');await navigator.clipboard.writeText(text);say('卡片已复制，可粘贴到笔记或聊天中。')}catch{byId('copy-fallback').hidden=false;byId('copy-text').value=text;byId('copy-text').focus();byId('copy-text').select();say('自动复制不可用。已展开可选择的文本，请手动复制。')}});
+download.addEventListener('click',()=>{if(!generated)return;const blob=new Blob([cardText()],{type:'text/markdown;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='行动卡-'+read().idea.replace(/[\\/:*?"<>|\u0000-\u001f]/g,'').slice(0,36)+'.md';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);say('下载已发起。Markdown 文件可用文本编辑器打开。')});
+try{const saved=localStorage.getItem(key);if(saved){const d=JSON.parse(saved);if(d.version===1&&d.fields&&typeof d.fields==='object'){apply(d.fields);say('已恢复此前保存的草稿。修改后请再次保存，生成后可复制或下载。')}else say('发现不兼容的旧草稿，本次未读取。你可以重新填写。')}}catch{say('未能读取本地草稿。仍可填写、生成并下载卡片。')}render();
+})();
+</script>
+</body>
+</html>
